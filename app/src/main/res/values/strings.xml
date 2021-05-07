@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">LatexDroid</string>
+    <string name="main_title">Input your equation or upload an image:</string>
+    <string name="input_field_hint">Your equation</string>
+    <string name="calculate_button_text">Calculate</string>
+    <!-- Content descriptions -->
+    <string name="gallery_button_desc">Upload an image from device</string>
+    <string name="camera_button_desc">Capture image</string>
 </resources>

@@ -4,15 +4,105 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/main_background"
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/title_instruction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:text="@string/main_title"
+        android:textColor="@color/primary_text_color"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.041" />
+
+    <EditText
+        android:id="@+id/editTextEquation"
+        android:layout_width="314dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="4dp"
+        android:ems="10"
+        android:hint="@string/input_field_hint"
+        android:textColorHint="@color/hint_text_color"
+        android:backgroundTint="@color/hint_tint_color"
+        android:importantForAutofill="no"
+        android:inputType="textPersonName"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/title_instruction"
+        app:layout_constraintStart_toStartOf="@+id/title_instruction"
+        app:layout_constraintTop_toBottomOf="@+id/title_instruction"
+        tools:targetApi="lollipop" />
+
+    <Button
+        android:id="@+id/calculateButton"
+        android:layout_width="136dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="4dp"
+        android:backgroundTint="@color/secondary_color"
+        android:text="@string/calculate_button_text"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="@+id/editTextEquation"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/editTextEquation"
+        app:layout_constraintTop_toBottomOf="@+id/editTextEquation"
+        tools:targetApi="lollipop" />
+
+    <ImageButton
+        android:id="@+id/galleryButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/background_color"
+        android:contentDescription="@string/gallery_button_desc"
+        app:layout_constraintStart_toEndOf="@+id/calculateButton"
+        app:layout_constraintTop_toBottomOf="@+id/editTextEquation"
+        app:srcCompat="@drawable/ic_gallery_import" />
+
+    <ImageButton
+        android:id="@+id/cameraButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:background="@color/background_color"
+        android:contentDescription="@string/camera_button_desc"
+        app:layout_constraintBottom_toBottomOf="@+id/galleryButton"
+        app:layout_constraintEnd_toEndOf="@+id/editTextEquation"
+        app:layout_constraintStart_toEndOf="@+id/galleryButton"
+        app:layout_constraintTop_toTopOf="@+id/galleryButton"
+        app:srcCompat="@drawable/ic_camera" />
+
+    <ImageView
+        android:id="@+id/answerWindow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:scaleX=".8"
+        android:scaleY=".8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calculateButton"
+        app:srcCompat="@drawable/answer_window" />
+
+    <EditText
+        android:id="@+id/answerText"
+        android:layout_width="240dp"
+        android:layout_height="450dp"
+        android:background="@null"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="@+id/answerWindow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/answerWindow"
+        app:layout_constraintVertical_bias="0.511" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
