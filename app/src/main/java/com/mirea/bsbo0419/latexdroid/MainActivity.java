@@ -31,8 +31,8 @@ public class MainActivity extends AppCompatActivity {
     Uri currentPhotoUri;
 
     /*
-    * Паша, тебе на строки 139, 143
-    * Ангелина, тебе на строки 58, а еще 140, 144
+    * Паша, тебе на строки 142, 148
+    * Ангелина, тебе на строки 60, а еще 143, 149
     */
 
     @Override
@@ -140,13 +140,13 @@ public class MainActivity extends AppCompatActivity {
                 answerText.setText("");
 
                 // Вызов функции Паши, Паша берет currentPhotoUri, а результат пихает в equationText.setText()
-                // После того, как отработала функция Паши, вызывается функция Ангелины (наверное в конце Пашиной)
+                // Вызов функции Ангелины, Ангелина берет equationText.getText().toString(), а результат пихает в answerText.setText()
                 break;
             case REQUEST_IMAGE_CAPTURE:
                 answerText.setText("");
 
                 // Вызов функции Паши, Паша берет currentPhotoUri, а результат пихает в equationText.setText()
-                // После того, как отработала функция Паши, вызывается функция Ангелины (наверное в конце Пашиной)
+                // Вызов функции Ангелины, Ангелина берет equationText.getText().toString(), а результат пихает в answerText.setText()
                 break;
             default:
                 break;
