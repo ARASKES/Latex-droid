@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 answerText.setEnabled(true);
+                answerText.setText("");
+
                 if (equationText.getText() != null && !equationText.getText().toString().equals("")) {
                     answerText.setEnabled(true);
 
@@ -135,11 +137,14 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK && data != null && data.getData() != null) {
                     currentPhotoUri = data.getData();
                 }
+                answerText.setText("");
 
                 // Вызов функции Паши, Паша берет currentPhotoUri, а результат пихает в equationText.setText()
                 // После того, как отработала функция Паши, вызывается функция Ангелины (наверное в конце Пашиной)
                 break;
             case REQUEST_IMAGE_CAPTURE:
+                answerText.setText("");
+
                 // Вызов функции Паши, Паша берет currentPhotoUri, а результат пихает в equationText.setText()
                 // После того, как отработала функция Паши, вызывается функция Ангелины (наверное в конце Пашиной)
                 break;
