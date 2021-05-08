@@ -9,21 +9,22 @@
 
     <TextView
         android:id="@+id/welcome_title"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="@string/welcome_title_text"
         android:textColor="@color/primary_text_color"
         android:textSize="36sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.214"
+        app:layout_constraintHorizontal_bias="0.405"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.139" />
+        app:layout_constraintVertical_bias="0.143" />
 
     <TextView
         android:id="@+id/welcome_subtitle"
-        android:layout_width="wrap_content"
+        android:layout_width="225dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:text="@string/welcome_subtitle_text"
@@ -40,7 +41,8 @@
         android:id="@+id/startButton"
         android:layout_width="136dp"
         android:layout_height="46dp"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="300dp"
         android:backgroundTint="@color/secondary_color"
         android:onClick="ProceedToMain"
         android:text="@string/start_button_text"
@@ -51,6 +53,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/welcome_subtitle"
         app:layout_constraintTop_toBottomOf="@+id/welcome_subtitle"
-        app:layout_constraintVertical_bias="0.111"
+        app:layout_constraintVertical_bias="0.0"
         tools:targetApi="lollipop" />
 </androidx.constraintlayout.widget.ConstraintLayout>
