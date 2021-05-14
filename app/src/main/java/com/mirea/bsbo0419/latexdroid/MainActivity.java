@@ -14,9 +14,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -51,17 +53,23 @@ public class MainActivity extends AppCompatActivity {
         calculateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                answerText.setEnabled(true);
                 answerText.setText("");
 
                 if (equationText.getText() != null && !equationText.getText().toString().equals("")) {
                     answerText.setEnabled(true);
-
                     // Вызов функции Ангелины, Ангелина берет equationText.getText().toString(), а результат пихает в answerText.setText()
+                    ArrayList<String> result = WolframAPI.SendQuery(equationText.getText().toString());
+                    String resultFormatted = "";
+                    for(String line : result){
+                        resultFormatted += line + "\n";
+                    }
+                    answerText.setText(resultFormatted);
+
                 } else {
                     answerText.setText("Error occured", TextView.BufferType.EDITABLE);
                     answerText.setEnabled(false);
                 }
+                answerText.setEnabled(true);
             }
         });
 
