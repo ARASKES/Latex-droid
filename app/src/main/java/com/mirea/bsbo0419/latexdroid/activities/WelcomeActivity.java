@@ -1,4 +1,4 @@
-package com.mirea.bsbo0419.latexdroid;
+package com.mirea.bsbo0419.latexdroid.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,8 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-public class WelcomeActivity extends AppCompatActivity {
+import com.mirea.bsbo0419.latexdroid.R;
 
+public class WelcomeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

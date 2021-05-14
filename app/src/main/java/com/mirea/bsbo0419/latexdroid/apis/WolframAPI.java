@@ -1,9 +1,7 @@
-package com.mirea.bsbo0419.latexdroid;
+package com.mirea.bsbo0419.latexdroid.apis;
+
 import com.wolfram.alpha.*;
 import java.util.ArrayList;
-import java.util.Scanner;
-
-import okhttp3.Response;
 
 public class WolframAPI {
     public static String input;
@@ -24,7 +22,6 @@ public class WolframAPI {
         query.setInput(input);
 
         Thread thread = new Thread(new Runnable() {
-
             @Override
             public void run() {
                 try  {
@@ -40,36 +37,35 @@ public class WolframAPI {
             thread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
+            return null;
+        }
+
+        if (queryResult == null) {
+            return null;
         }
 
         if (queryResult.isError()) {
-            System.out.println("Query error");
-
+            return null;
         } else if (!queryResult.isSuccess()) {
-            System.out.println("Query was not understood; no results available.");
-
+            return null;
         } else {
-
-            if(typeOfTask){
+            if(typeOfTask) {
                 for (WAPod pod : queryResult.getPods()) {
                     if (!pod.isError()) {
-                        if(pod.getTitle().toLowerCase().contains("solution")){
-                            for (WASubpod subpod : pod.getSubpods()) {
-                                for (Object element : subpod.getContents()) {
+                        if(pod.getTitle().toLowerCase().contains("solution")) {
+                            for (WASubpod subPod : pod.getSubpods()) {
+                                for (Object element : subPod.getContents()) {
                                     if (element instanceof WAPlainText) {
                                         res.add(((WAPlainText) element).getText());
-
                                     }
                                 }
                             }
                         }
                     }
                 }
-            }
-            else{
+            } else {
                 res = FindResult();
             }
-
         }
 
         return res;
@@ -81,11 +77,10 @@ public class WolframAPI {
         for (WAPod pod : queryResult.getPods()) {
             if (!pod.isError()) {
                 if(pod.getTitle().toLowerCase().contains("approximation")){
-                    for (WASubpod subpod : pod.getSubpods()) {
-                        for (Object element : subpod.getContents()) {
+                    for (WASubpod subPod : pod.getSubpods()) {
+                        for (Object element : subPod.getContents()) {
                             if (element instanceof WAPlainText) {
                                 res.add(((WAPlainText) element).getText());
-
                             }
                         }
                     }
@@ -93,15 +88,14 @@ public class WolframAPI {
             }
         }
 
-        if(res.isEmpty()){
+        if(res.isEmpty()) {
             for (WAPod pod : queryResult.getPods()) {
                 if (!pod.isError()) {
-                    if(pod.getTitle().toLowerCase().contains("result")){
-                        for (WASubpod subpod : pod.getSubpods()) {
-                            for (Object element : subpod.getContents()) {
+                    if(pod.getTitle().toLowerCase().contains("result")) {
+                        for (WASubpod subPod : pod.getSubpods()) {
+                            for (Object element : subPod.getContents()) {
                                 if (element instanceof WAPlainText) {
                                     res.add(((WAPlainText) element).getText());
-
                                 }
                             }
                         }
@@ -112,6 +106,4 @@ public class WolframAPI {
 
         return res;
     }
-
 }
-

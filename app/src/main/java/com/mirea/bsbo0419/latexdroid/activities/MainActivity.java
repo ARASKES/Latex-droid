@@ -1,20 +1,25 @@
-package com.mirea.bsbo0419.latexdroid;
+package com.mirea.bsbo0419.latexdroid.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import java.io.Console;
+import com.mirea.bsbo0419.latexdroid.R;
+import com.mirea.bsbo0419.latexdroid.apis.LaTeX_OCR_API;
+import com.mirea.bsbo0419.latexdroid.apis.WolframAPI;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -32,11 +37,6 @@ public class MainActivity extends AppCompatActivity {
 
     Uri currentPhotoUri;
 
-    /*
-    * Паша, тебе на строки 142, 148
-    * Ангелина, тебе на строки 60, а еще 143, 149
-    */
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,24 +53,15 @@ public class MainActivity extends AppCompatActivity {
         calculateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                HideVirtualKeyboard();
                 answerText.setText("");
 
                 if (equationText.getText() != null && !equationText.getText().toString().equals("")) {
                     answerText.setEnabled(true);
-                    System.out.println(answerText.getText());
-                    // Вызов функции Ангелины, Ангелина берет equationText.getText().toString(), а результат пихает в answerText.setText()
-                    ArrayList<String> result = WolframAPI.SendQuery(equationText.getText().toString());
-                    String resultFormatted = "";
-                    for(String line : result){
-                        resultFormatted += line + "\n";
-                    }
-                    answerText.setText(resultFormatted);
-
+                    QueryWolframAPI();
                 } else {
-                    answerText.setText("Error occured", TextView.BufferType.EDITABLE);
-                    answerText.setEnabled(false);
+                    HandleErrors();
                 }
-                answerText.setEnabled(true);
             }
         });
 
@@ -110,23 +101,17 @@ public class MainActivity extends AppCompatActivity {
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
-                answerText.setText("Error occured", TextView.BufferType.EDITABLE);
-                answerText.setEnabled(false);
+                HandleErrors();
+                return;
             }
 
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this,
-                        "com.example.android.fileprovider",
-                        photoFile);
-                currentPhotoUri = photoURI;
+            Uri photoURI = FileProvider.getUriForFile(this,
+                    "com.example.android.fileprovider",
+                    photoFile);
+            currentPhotoUri = photoURI;
 
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-
-            } else {
-                answerText.setText("Error occured", TextView.BufferType.EDITABLE);
-                answerText.setEnabled(false);
-            }
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
 
@@ -141,25 +126,76 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        LaTeX_OCR_API laTeXOcrApi;
+
+        answerText.setText("");
+
         switch (requestCode) {
             case REQUEST_SELECT_IMAGE:
                 if (resultCode == RESULT_OK && data != null && data.getData() != null) {
                     currentPhotoUri = data.getData();
                 }
-                answerText.setText("");
-                laTeXOcrApi = new LaTeX_OCR_API(this, currentPhotoUri);
-                equationText.setText(laTeXOcrApi.connectToServer());
-                WolframAPI.SendQuery(equationText.getText().toString());
+                QueryLatexAPI();
+                QueryWolframAPI();
                 break;
             case REQUEST_IMAGE_CAPTURE:
-                answerText.setText("");
-                laTeXOcrApi = new LaTeX_OCR_API(this, currentPhotoUri);
-                equationText.setText(laTeXOcrApi.connectToServer());
-                WolframAPI.SendQuery(equationText.getText().toString());
+                QueryLatexAPI();
+                QueryWolframAPI();
                 break;
             default:
                 break;
+        }
+    }
+
+    private void QueryWolframAPI() {
+        ArrayList<String> result = WolframAPI.SendQuery(equationText.getText().toString());
+
+        String resultFormatted = "";
+        if (result != null && result.size() != 0) {
+            if (!result.get(0).equals("")) {
+                for (String line : result) {
+                    resultFormatted += line + "\n";
+                }
+            } else {
+                HandleErrors();
+                return;
+            }
+        } else {
+            HandleErrors();
+            return;
+        }
+
+        if (!resultFormatted.equals("")) {
+            resultFormatted = resultFormatted.substring(0, resultFormatted.length() - 1);
+            answerText.setText(resultFormatted);
+        } else {
+            HandleErrors();
+        }
+    }
+
+    private void QueryLatexAPI() {
+        LaTeX_OCR_API laTeXApiInstance = new LaTeX_OCR_API(this, currentPhotoUri);
+
+        String response = laTeXApiInstance.GetResponseFromServer();
+        if (response != null) {
+            equationText.setText(response);
+        } else {
+            HandleErrors();
+        }
+    }
+
+    private void HandleErrors() {
+        answerText.setText(R.string.error_text, TextView.BufferType.EDITABLE);
+        answerText.setEnabled(false);
+    }
+
+    private void HideVirtualKeyboard() {
+        View focusedView = this.getCurrentFocus();
+        if (focusedView != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(focusedView.getWindowToken(), 0);
+        }
+        if (focusedView != null) {
+            focusedView.clearFocus();
         }
     }
 }

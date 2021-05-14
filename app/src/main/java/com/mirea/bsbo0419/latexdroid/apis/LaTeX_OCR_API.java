@@ -1,19 +1,14 @@
-package com.mirea.bsbo0419.latexdroid;
+package com.mirea.bsbo0419.latexdroid.apis;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.StrictMode;
 import android.provider.MediaStore;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
 
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -25,12 +20,10 @@ public class LaTeX_OCR_API {
     public static final String IP = "34.118.83.161";
 
     public String result = "";
-    private Context context = null;
     private Bitmap bitmap;
 
     public LaTeX_OCR_API(Context context, Uri imageUri)
     {
-        this.context = context;
         try {
             bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
         } catch (IOException e) {
@@ -38,15 +31,14 @@ public class LaTeX_OCR_API {
         }
     }
 
-    public String connectToServer()
+    public String GetResponseFromServer()
     {
-
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.RGB_565;
         // Read BitMap by file path
         if (bitmap == null)
-            return "ERROR!!!";
+            return null;
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] byteArray = stream.toByteArray();
 
@@ -55,11 +47,11 @@ public class LaTeX_OCR_API {
                 .addFormDataPart("image", "temp.jpg", RequestBody.create(MediaType.parse("image/*jpg"), byteArray))
                 .build();
 
-        postRequest(postBodyImage);
+        PostRequest(postBodyImage);
         return result;
     }
 
-    void postRequest(RequestBody postBody) {
+    void PostRequest(RequestBody postBody) {
 
         OkHttpClient client = new OkHttpClient();
 
@@ -67,7 +59,6 @@ public class LaTeX_OCR_API {
                 .url("http://" + IP +":" + "9090" + "/upload_image")
                 .post(postBody)
                 .build();
-
 
         Thread thread = new Thread(new Runnable() {
 
@@ -92,29 +83,5 @@ public class LaTeX_OCR_API {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-//        client.newCall(request).enqueue(new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                // Cancel the post on failure.
-//                call.cancel();
-//                System.out.println(Arrays.toString(e.getStackTrace()));
-//                // In order to access the TextView inside the UI thread, the code is executed inside runOnUiThread()
-//                result = "Error!";
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, final Response response) throws IOException {
-//                // In order to access the TextView inside the UI thread, the code is executed inside runOnUiThread()
-//                try {
-//                    //responseText.setText(response.body().string());
-//                    result = response.body().string();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
     }
-
 }
-

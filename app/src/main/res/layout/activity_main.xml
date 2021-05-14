@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/main_background"
-    tools:context=".MainActivity">
+    tools:context=".activities.MainActivity">
 
     <TextView
         android:id="@+id/title_instruction"
@@ -29,7 +29,8 @@
         android:layout_marginTop="4dp"
         android:ems="10"
         android:hint="@string/input_field_hint"
-        android:textColorHint="@color/hint_text_color"
+        android:textColor="@color/primary_text_color"
+        android:textColorHint="@color/secondary_text_color"
         android:backgroundTint="@color/hint_tint_color"
         android:importantForAutofill="no"
         android:inputType="textPersonName"
@@ -89,10 +90,12 @@
         android:contentDescription="@string/answer_window_desc"
         android:scaleX="1"
         android:scaleY="1"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calculateButton"
+        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/answer_window" />
 
     <EditText
@@ -104,7 +107,8 @@
         android:hint="@string/answer_hint_text"
         android:importantForAutofill="no"
         android:inputType="textMultiLine"
-        android:textColor="#000000"
+        android:textAlignment="center"
+        android:textColor="@color/answer_text_color"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/answerWindow"
         app:layout_constraintEnd_toEndOf="@+id/answerWindow"
