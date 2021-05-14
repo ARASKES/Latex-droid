@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.mirea.bsbo0419.latexdroid.R;
 import com.mirea.bsbo0419.latexdroid.apis.LaTeX_OCR_API;
 import com.mirea.bsbo0419.latexdroid.apis.WolframAPI;
+import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.File;
 import java.io.IOException;
@@ -76,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dispatchTakePictureIntent();
                 answerText.setEnabled(true);
+                dispatchTakePictureIntent();
             }
         });
     }
@@ -134,10 +135,22 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK && data != null && data.getData() != null) {
                     currentPhotoUri = data.getData();
                 }
+                
                 QueryLatexAPI();
                 QueryWolframAPI();
                 break;
             case REQUEST_IMAGE_CAPTURE:
+                CropImage.activity(currentPhotoUri)
+                        .start(this);
+                break;
+            case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+                CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                if (resultCode == RESULT_OK) {
+                    currentPhotoUri = result.getUri();
+                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                    HandleErrors();
+                }
+
                 QueryLatexAPI();
                 QueryWolframAPI();
                 break;

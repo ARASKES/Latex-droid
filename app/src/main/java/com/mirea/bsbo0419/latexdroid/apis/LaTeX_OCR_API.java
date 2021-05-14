@@ -17,7 +17,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class LaTeX_OCR_API {
-    public static final String IP = "34.118.83.161";
+    public static final String IP = "34.116.252.187";
 
     public String result = "";
     private Bitmap bitmap;
