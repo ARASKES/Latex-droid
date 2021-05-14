@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (equationText.getText() != null && !equationText.getText().toString().equals("")) {
                     answerText.setEnabled(true);
+                    System.out.println(answerText.getText());
                     // Вызов функции Ангелины, Ангелина берет equationText.getText().toString(), а результат пихает в answerText.setText()
                     ArrayList<String> result = WolframAPI.SendQuery(equationText.getText().toString());
                     String resultFormatted = "";
@@ -140,21 +141,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        LaTeX_OCR_API laTeXOcrApi;
         switch (requestCode) {
             case REQUEST_SELECT_IMAGE:
                 if (resultCode == RESULT_OK && data != null && data.getData() != null) {
                     currentPhotoUri = data.getData();
                 }
                 answerText.setText("");
-
-                // Вызов функции Паши, Паша берет currentPhotoUri, а результат пихает в equationText.setText()
-                // Вызов функции Ангелины, Ангелина берет equationText.getText().toString(), а результат пихает в answerText.setText()
+                laTeXOcrApi = new LaTeX_OCR_API(this, currentPhotoUri);
+                equationText.setText(laTeXOcrApi.connectToServer());
+                WolframAPI.SendQuery(equationText.getText().toString());
                 break;
             case REQUEST_IMAGE_CAPTURE:
                 answerText.setText("");
-
-                // Вызов функции Паши, Паша берет currentPhotoUri, а результат пихает в equationText.setText()
-                // Вызов функции Ангелины, Ангелина берет equationText.getText().toString(), а результат пихает в answerText.setText()
+                laTeXOcrApi = new LaTeX_OCR_API(this, currentPhotoUri);
+                equationText.setText(laTeXOcrApi.connectToServer());
+                WolframAPI.SendQuery(equationText.getText().toString());
                 break;
             default:
                 break;

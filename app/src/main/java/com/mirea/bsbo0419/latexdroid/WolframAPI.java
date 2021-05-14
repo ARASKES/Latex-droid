@@ -3,6 +3,8 @@ import com.wolfram.alpha.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import okhttp3.Response;
+
 public class WolframAPI {
     public static String input;
     public static boolean typeOfTask;
@@ -21,40 +23,53 @@ public class WolframAPI {
         WAQuery query = engine.createQuery();
         query.setInput(input);
 
+        Thread thread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try  {
+                    queryResult = engine.performQuery(query);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        thread.start();
         try {
-            queryResult = engine.performQuery(query);
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-            if (queryResult.isError()) {
-                System.out.println("Query error");
+        if (queryResult.isError()) {
+            System.out.println("Query error");
 
-            } else if (!queryResult.isSuccess()) {
-                System.out.println("Query was not understood; no results available.");
+        } else if (!queryResult.isSuccess()) {
+            System.out.println("Query was not understood; no results available.");
 
-            } else {
+        } else {
 
-                if(typeOfTask){
-                    for (WAPod pod : queryResult.getPods()) {
-                        if (!pod.isError()) {
-                            if(pod.getTitle().toLowerCase().contains("solution")){
-                                for (WASubpod subpod : pod.getSubpods()) {
-                                    for (Object element : subpod.getContents()) {
-                                        if (element instanceof WAPlainText) {
-                                            res.add(((WAPlainText) element).getText());
+            if(typeOfTask){
+                for (WAPod pod : queryResult.getPods()) {
+                    if (!pod.isError()) {
+                        if(pod.getTitle().toLowerCase().contains("solution")){
+                            for (WASubpod subpod : pod.getSubpods()) {
+                                for (Object element : subpod.getContents()) {
+                                    if (element instanceof WAPlainText) {
+                                        res.add(((WAPlainText) element).getText());
 
-                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
-                else{
-                    res = FindResult();
-                }
-
             }
-        } catch (WAException e) {
-            e.printStackTrace();
+            else{
+                res = FindResult();
+            }
+
         }
 
         return res;
