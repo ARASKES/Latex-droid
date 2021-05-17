@@ -33,8 +33,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     EditText answerText, equationText;
-    Button calculateButton;
-    ImageButton galleryButton, cameraButton;
 
     Uri currentPhotoUri;
 
@@ -46,41 +44,32 @@ public class MainActivity extends AppCompatActivity {
         equationText = findViewById(R.id.editTextEquation);
         answerText = findViewById(R.id.answerText);
         answerText.setEnabled(false);
+    }
 
-        calculateButton = findViewById(R.id.calculateButton);
-        galleryButton = findViewById(R.id.galleryButton);
-        cameraButton = findViewById(R.id.cameraButton);
+    public void onCalculateClick(View view) {
+        HideVirtualKeyboard();
+        answerText.setText("");
 
-        calculateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                HideVirtualKeyboard();
-                answerText.setText("");
+        if (equationText.getText() != null && !equationText.getText().toString().equals("")) {
+            answerText.setEnabled(true);
+            QueryWolframAPI();
+        } else {
+            HandleErrors();
+        }
+    }
 
-                if (equationText.getText() != null && !equationText.getText().toString().equals("")) {
-                    answerText.setEnabled(true);
-                    QueryWolframAPI();
-                } else {
-                    HandleErrors();
-                }
-            }
-        });
+    public void onGalleryClick(View view) {
+        selectImageInGallery();
+        answerText.setEnabled(true);
+    }
 
-        galleryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectImageInGallery();
-                answerText.setEnabled(true);
-            }
-        });
+    public void onCameraClick(View view) {
+        answerText.setEnabled(true);
+        dispatchTakePictureIntent();
+    }
 
-        cameraButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                answerText.setEnabled(true);
-                dispatchTakePictureIntent();
-            }
-        });
+    public void onClearClick(View view) {
+        equationText.setText("");
     }
 
     private File createImageFile() throws IOException {

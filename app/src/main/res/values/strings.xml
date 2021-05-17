@@ -11,6 +11,7 @@
     <string name="answer_hint_text">The answer will be here</string>
     <string name="error_text">Error occurred</string>
         <!-- Content descriptions -->
+    <string name="clear_button_desc">Clear the input field.</string>
     <string name="gallery_button_desc">Upload an image from device.</string>
     <string name="camera_button_desc">Capture image.</string>
     <string name="answer_window_desc">The window for answer display.</string>

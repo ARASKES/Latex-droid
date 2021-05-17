@@ -24,21 +24,35 @@
 
     <EditText
         android:id="@+id/editTextEquation"
-        android:layout_width="314dp"
+        android:layout_width="293dp"
         android:layout_height="0dp"
         android:layout_marginTop="4dp"
+        android:backgroundTint="@color/hint_tint_color"
         android:ems="10"
         android:hint="@string/input_field_hint"
-        android:textColor="@color/primary_text_color"
-        android:textColorHint="@color/secondary_text_color"
-        android:backgroundTint="@color/hint_tint_color"
         android:importantForAutofill="no"
         android:inputType="textPersonName"
+        android:textColor="@color/primary_text_color"
+        android:textColorHint="@color/secondary_text_color"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@+id/title_instruction"
         app:layout_constraintStart_toStartOf="@+id/title_instruction"
         app:layout_constraintTop_toBottomOf="@+id/title_instruction"
         tools:targetApi="lollipop" />
+
+    <ImageButton
+        android:id="@+id/clearButton"
+        android:layout_width="39dp"
+        android:layout_height="36dp"
+        android:background="@null"
+        android:contentDescription="@string/clear_button_desc"
+        android:onClick="onClearClick"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextEquation"
+        app:layout_constraintEnd_toEndOf="@+id/title_instruction"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/editTextEquation"
+        app:layout_constraintTop_toTopOf="@+id/editTextEquation"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/ic_clear_input" />
 
     <Button
         android:id="@+id/calculateButton"
@@ -49,6 +63,7 @@
         android:text="@string/calculate_button_text"
         android:textStyle="bold"
         android:textAllCaps="false"
+        android:onClick="onCalculateClick"
         app:layout_constraintEnd_toEndOf="@+id/editTextEquation"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/editTextEquation"
@@ -63,6 +78,7 @@
         android:layout_marginTop="16dp"
         android:background="@null"
         android:contentDescription="@string/gallery_button_desc"
+        android:onClick="onGalleryClick"
         app:layout_constraintStart_toEndOf="@+id/calculateButton"
         app:layout_constraintTop_toBottomOf="@+id/editTextEquation"
         app:srcCompat="@drawable/ic_gallery_import" />
@@ -74,6 +90,7 @@
         android:layout_marginStart="12dp"
         android:background="@null"
         android:contentDescription="@string/camera_button_desc"
+        android:onClick="onCameraClick"
         app:layout_constraintBottom_toBottomOf="@+id/galleryButton"
         app:layout_constraintEnd_toEndOf="@+id/editTextEquation"
         app:layout_constraintHorizontal_bias="0.0"
