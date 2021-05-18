@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.mirea.bsbo0419.latexdroid.R;
 import com.mirea.bsbo0419.latexdroid.apis.LaTeX_OCR_API;
-import com.mirea.bsbo0419.latexdroid.apis.RPN.PRN_Core;
+import com.mirea.bsbo0419.latexdroid.apis.RPN.RPN_Core;
 import com.mirea.bsbo0419.latexdroid.apis.RPN.RPN_Parser;
 import com.mirea.bsbo0419.latexdroid.apis.WolframAPI;
 import com.mirea.bsbo0419.latexdroid.apis.network.NetworkAPI;
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 List<String> expression = RPN_Parser.getParsedStr(equationText.getText().toString());
                 if (expression.size() != 0 && !expression.contains("Error")) {
-                    answerText.setText(String.valueOf(PRN_Core.calc(expression) + "\n"));
+                    answerText.setText(String.valueOf(RPN_Core.calc(expression) + "\n"));
                 }
                 else {
                     HandleErrors();

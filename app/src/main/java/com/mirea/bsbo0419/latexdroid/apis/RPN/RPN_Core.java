@@ -2,7 +2,7 @@ package com.mirea.bsbo0419.latexdroid.apis.RPN;
 import java.util.*;
 import java.lang.*;
 
-public class PRN_Core {
+public class RPN_Core {
 
     public static Double calc(List<String> expression) {
         Deque<Double> stack = new ArrayDeque<Double>();
