@@ -15,6 +15,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.mirea.bsbo0419.latexdroid.R;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
     //  Views
     EditText answerText, equationText;
+    ProgressBar loadingBar;
 
     // Data
     Uri currentPhotoUri;
@@ -52,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         broadcastReceiver = new NetworkReceiver();
+
+        loadingBar = findViewById(R.id.loadingBar);
+        loadingBar.setVisibility(View.GONE);
 
         equationText = findViewById(R.id.editTextEquation);
         answerText = findViewById(R.id.answerText);
@@ -77,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
     public void onCalculateClick(View view) {
         HideVirtualKeyboard();
         answerText.setText("");
+        loadingBar.setVisibility(View.VISIBLE);
 
         if (equationText.getText() != null && !equationText.getText().toString().equals("")) {
             answerText.setEnabled(true);
@@ -84,8 +90,9 @@ public class MainActivity extends AppCompatActivity {
                 QueryWolframAPI();
             } else {
                 List<String> expression = RPN_Parser.getParsedStr(equationText.getText().toString());
+
                 if (expression.size() != 0 && !expression.contains("Error")) {
-                    answerText.setText(String.valueOf(RPN_Core.calc(expression) + "\n"));
+                    answerText.setText(String.valueOf(RPN_Core.calc(expression)));
                 }
                 else {
                     HandleErrors();
@@ -94,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             HandleErrors();
         }
+        
+        loadingBar.setVisibility(View.GONE);
     }
 
     public void onGalleryClick(View view) {
@@ -108,6 +117,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClearClick(View view) {
         equationText.setText("");
+    }
+
+    private void selectImageInGallery() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, REQUEST_SELECT_IMAGE);
+        }
     }
 
     private File createImageFile() throws IOException {
@@ -143,19 +160,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void selectImageInGallery() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intent, REQUEST_SELECT_IMAGE);
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         answerText.setText("");
+        loadingBar.setVisibility(View.VISIBLE);
 
         switch (requestCode) {
             case REQUEST_SELECT_IMAGE:
@@ -167,6 +177,8 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     answerText.setEnabled(false);
                 }
+
+                loadingBar.setVisibility(View.GONE);
                 break;
             case REQUEST_IMAGE_CAPTURE:
                 if (resultCode == RESULT_OK) {
@@ -175,8 +187,12 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     answerText.setEnabled(false);
                 }
+
+                loadingBar.setVisibility(View.GONE);
                 break;
             case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+                loadingBar.setVisibility(View.VISIBLE);
+
                 CropImage.ActivityResult result = CropImage.getActivityResult(data);
                 if (resultCode == RESULT_OK) {
                     currentPhotoUri = result.getUri();
@@ -188,9 +204,22 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     answerText.setEnabled(false);
                 }
+
+                loadingBar.setVisibility(View.GONE);
                 break;
             default:
                 break;
+        }
+    }
+
+    private void QueryLatexAPI() {
+        LaTeX_OCR_API laTeXApiInstance = new LaTeX_OCR_API(this, currentPhotoUri);
+
+        String response = laTeXApiInstance.GetResponseFromServer();
+        if (response != null) {
+            equationText.setText(response);
+        } else {
+            HandleErrors();
         }
     }
 
@@ -220,18 +249,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void QueryLatexAPI() {
-        LaTeX_OCR_API laTeXApiInstance = new LaTeX_OCR_API(this, currentPhotoUri);
-
-        String response = laTeXApiInstance.GetResponseFromServer();
-        if (response != null) {
-            equationText.setText(response);
-        } else {
-            HandleErrors();
-        }
-    }
-
     private void HandleErrors() {
+        loadingBar.setVisibility(View.GONE);
         answerText.setText(R.string.error_text, TextView.BufferType.EDITABLE);
         answerText.setEnabled(false);
     }

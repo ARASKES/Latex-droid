@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.LatexDroid" parent="Theme.AppCompat.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/background_color</item>
+        <item name="colorPrimary">@color/tertiary_color</item>
+        <item name="colorPrimaryVariant">@color/primary_color</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
@@ -13,5 +13,13 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="android:fontFamily">@font/montserrat_light</item>
+        <item name="android:windowAnimationStyle">@style/AppActivityAnimation</item>
+    </style>
+
+    <style name="AppActivityAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_from_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_to_left</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_from_left</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_to_right</item>
     </style>
 </resources>

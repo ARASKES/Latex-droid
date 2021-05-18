@@ -1,4 +1,5 @@
 package com.mirea.bsbo0419.latexdroid.apis.RPN;
+
 import java.util.*;
 import java.lang.*;
 
@@ -38,17 +39,4 @@ public class RPN_Core {
         }
         return stack.pop();
     }
-
-    /*public static Double calc() {
-        Scanner in = new Scanner(System.in);
-        String s = in.nextLine();
-        List<String> expression = RPN_Parser.getParsedStr(s);
-        for (String x : expression) System.out.print(x + " ");  //RPN output
-        if (!expression.contains("Error")) {
-            System.out.println();
-            System.out.println(calc(expression));               //Result output
-            return calc(expression);
-        }
-        return null;
-    }*/
 }

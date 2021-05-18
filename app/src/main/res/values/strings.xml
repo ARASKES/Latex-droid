@@ -18,6 +18,6 @@
     <!-- Network -->
     <string name="server_ip_address">34.118.83.161</string>
     <string name="wolfram_app_id">K6T6J7-EPP65Y7RHG</string>
-    <string name="network_established_message">Network connection is established!</string>
-    <string name="network_not_found_message">No internet connection found. The application functional will be restricted.</string>
+    <string name="network_established_message">You are back online!</string>
+    <string name="network_not_found_message">You are offline. The application functional will be restricted.</string>
 </resources>

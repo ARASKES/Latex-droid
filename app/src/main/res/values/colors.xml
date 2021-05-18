@@ -7,8 +7,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="background_color">#2d245d</color>
+    <color name="primary_color">#2d245d</color>
     <color name="secondary_color">#ffa100</color>
+    <color name="tertiary_color">#62588F</color>
     <color name="hint_tint_color">#fff</color>
     <color name="primary_text_color">#fff</color>
     <color name="secondary_text_color">#ccc</color>
