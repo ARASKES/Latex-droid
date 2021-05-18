@@ -19,6 +19,8 @@ import android.widget.TextView;
 
 import com.mirea.bsbo0419.latexdroid.R;
 import com.mirea.bsbo0419.latexdroid.apis.LaTeX_OCR_API;
+import com.mirea.bsbo0419.latexdroid.apis.RPN.PRN_Core;
+import com.mirea.bsbo0419.latexdroid.apis.RPN.RPN_Parser;
 import com.mirea.bsbo0419.latexdroid.apis.WolframAPI;
 import com.mirea.bsbo0419.latexdroid.apis.network.NetworkAPI;
 import com.mirea.bsbo0419.latexdroid.apis.network.NetworkReceiver;
@@ -29,6 +31,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -80,7 +83,13 @@ public class MainActivity extends AppCompatActivity {
             if (NetworkAPI.GetNetworkStatus(this)) {
                 QueryWolframAPI();
             } else {
-                // Вызов калькулятора польской нотации
+                List<String> expression = RPN_Parser.getParsedStr(equationText.getText().toString());
+                if (expression.size() != 0 && !expression.contains("Error")) {
+                    answerText.setText(String.valueOf(PRN_Core.calc(expression) + "\n"));
+                }
+                else {
+                    HandleErrors();
+                }
             }
         } else {
             HandleErrors();
