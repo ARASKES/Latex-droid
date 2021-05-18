@@ -60,7 +60,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(broadcastReceiver);
+        try {
+            unregisterReceiver(broadcastReceiver);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 
     public void dispatchBroadcastIntent() {
@@ -84,8 +88,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onGalleryClick(View view) {
-        selectImageInGallery();
         answerText.setEnabled(true);
+        selectImageInGallery();
     }
 
     public void onCameraClick(View view) {
@@ -148,25 +152,33 @@ public class MainActivity extends AppCompatActivity {
             case REQUEST_SELECT_IMAGE:
                 if (resultCode == RESULT_OK && data != null && data.getData() != null) {
                     currentPhotoUri = data.getData();
+
+                    QueryLatexAPI();
+                    QueryWolframAPI();
+                } else {
+                    answerText.setEnabled(false);
                 }
-                
-                QueryLatexAPI();
-                QueryWolframAPI();
                 break;
             case REQUEST_IMAGE_CAPTURE:
-                CropImage.activity(currentPhotoUri)
-                        .start(this);
+                if (resultCode == RESULT_OK) {
+                    CropImage.activity(currentPhotoUri)
+                            .start(this);
+                } else {
+                    answerText.setEnabled(false);
+                }
                 break;
             case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
                 CropImage.ActivityResult result = CropImage.getActivityResult(data);
                 if (resultCode == RESULT_OK) {
                     currentPhotoUri = result.getUri();
+
+                    QueryLatexAPI();
+                    QueryWolframAPI();
                 } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                     HandleErrors();
+                } else {
+                    answerText.setEnabled(false);
                 }
-
-                QueryLatexAPI();
-                QueryWolframAPI();
                 break;
             default:
                 break;

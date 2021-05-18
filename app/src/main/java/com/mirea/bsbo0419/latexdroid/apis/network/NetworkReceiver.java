@@ -29,6 +29,6 @@ public class NetworkReceiver extends BroadcastReceiver {
             cameraButton.setEnabled(false);
         }
 
-        Toast.makeText(context, status, Toast.LENGTH_LONG).show();
+        Toast.makeText(context, status, Toast.LENGTH_SHORT).show();
     }
 }
