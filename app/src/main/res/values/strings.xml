@@ -15,7 +15,9 @@
     <string name="gallery_button_desc">Upload an image from device.</string>
     <string name="camera_button_desc">Capture image.</string>
     <string name="answer_window_desc">The window for answer display.</string>
-        <!-- Network -->
+    <!-- Network -->
+    <string name="server_ip_address">34.116.252.187</string>
+    <string name="wolfram_app_id">K6T6J7-EPP65Y7RHG</string>
     <string name="network_established_message">Network connection is established!</string>
     <string name="network_not_found_message">No internet connection found. The application functional will be restricted.</string>
 </resources>

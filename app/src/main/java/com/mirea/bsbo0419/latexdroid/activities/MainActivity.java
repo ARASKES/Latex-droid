@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void QueryWolframAPI() {
-        ArrayList<String> result = WolframAPI.SendQuery(equationText.getText().toString());
+        ArrayList<String> result = WolframAPI.SendQuery(equationText.getText().toString(), this);
 
         String resultFormatted = "";
         if (result != null && result.size() != 0) {

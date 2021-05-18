@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 
+import com.mirea.bsbo0419.latexdroid.R;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
@@ -17,13 +19,15 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class LaTeX_OCR_API {
-    public static final String IP = "34.116.252.187";
+    public static String IP = null;
 
     public String result = "";
     private Bitmap bitmap;
 
     public LaTeX_OCR_API(Context context, Uri imageUri)
     {
+        IP = context.getString(R.string.server_ip_address);
+
         try {
             bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
         } catch (IOException e) {

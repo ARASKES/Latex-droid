@@ -1,5 +1,8 @@
 package com.mirea.bsbo0419.latexdroid.apis;
 
+import android.content.Context;
+
+import com.mirea.bsbo0419.latexdroid.R;
 import com.wolfram.alpha.*;
 import java.util.ArrayList;
 
@@ -8,7 +11,7 @@ public class WolframAPI {
     public static boolean typeOfTask;
     public static WAQueryResult queryResult;
 
-    public static ArrayList<String> SendQuery(String equationText){
+    public static ArrayList<String> SendQuery(String equationText, Context context){
 
         input = equationText;
 
@@ -16,7 +19,7 @@ public class WolframAPI {
         typeOfTask = input.contains("=");
 
         WAEngine engine = new WAEngine();
-        engine.setAppID("K6T6J7-EPP65Y7RHG");
+        engine.setAppID(context.getString(R.string.wolfram_app_id));
 
         WAQuery query = engine.createQuery();
         query.setInput(input);
