@@ -1,7 +1,8 @@
 package com.mirea.bsbo0419.latexdroid.apis.RPN;
 
-import java.util.*;
-import java.lang.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.List;
 
 public class RPN_Core {
 

@@ -5,6 +5,7 @@ import androidx.core.content.FileProvider;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
@@ -65,53 +66,19 @@ public class MainActivity extends AppCompatActivity {
         dispatchBroadcastIntent();
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        try {
-            unregisterReceiver(broadcastReceiver);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void dispatchBroadcastIntent() {
-        registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-    }
-
+    //  onClick methods
     public void onCalculateClick(View view) {
         HideVirtualKeyboard();
-        answerText.setText("");
         loadingBar.setVisibility(View.VISIBLE);
 
-        if (equationText.getText() != null && !equationText.getText().toString().equals("")) {
-            answerText.setEnabled(true);
-            if (NetworkAPI.GetNetworkStatus(this)) {
-                QueryWolframAPI();
-            } else {
-                List<String> expression = RPN_Parser.getParsedStr(equationText.getText().toString());
-
-                if (expression.size() != 0 && !expression.contains("Error")) {
-                    answerText.setText(String.valueOf(RPN_Core.calc(expression)));
-                }
-                else {
-                    HandleErrors();
-                }
-            }
-        } else {
-            HandleErrors();
-        }
-        
-        loadingBar.setVisibility(View.GONE);
+        new Thread(() -> CalculateFromInput(this)).start();
     }
 
     public void onGalleryClick(View view) {
-        answerText.setEnabled(true);
         selectImageInGallery();
     }
 
     public void onCameraClick(View view) {
-        answerText.setEnabled(true);
         dispatchTakePictureIntent();
     }
 
@@ -119,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         equationText.setText("");
     }
 
+    //  Intent preparation methods
     private void selectImageInGallery() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
@@ -141,12 +109,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            File photoFile = null;
+            File photoFile;
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
-                HandleErrors();
+                DisplayError();
                 return;
             }
 
@@ -154,105 +123,145 @@ public class MainActivity extends AppCompatActivity {
                     "com.example.android.fileprovider",
                     photoFile);
             currentPhotoUri = photoURI;
-
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
 
+    //  Activity result catching
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        answerText.setText("");
         loadingBar.setVisibility(View.VISIBLE);
 
         switch (requestCode) {
             case REQUEST_SELECT_IMAGE:
-                if (resultCode == RESULT_OK && data != null && data.getData() != null) {
-                    currentPhotoUri = data.getData();
+                new Thread(() -> {
+                    if (resultCode == RESULT_OK && data != null && data.getData() != null) {
+                        currentPhotoUri = data.getData();
 
-                    QueryLatexAPI();
-                    QueryWolframAPI();
-                } else {
-                    answerText.setEnabled(false);
-                }
+                        QueryLatexAPI(this);
+                        QueryWolframAPI();
+                    }
 
-                loadingBar.setVisibility(View.GONE);
+                    HideLoadingBar();
+                });
                 break;
             case REQUEST_IMAGE_CAPTURE:
                 if (resultCode == RESULT_OK) {
                     CropImage.activity(currentPhotoUri)
                             .start(this);
                 } else {
-                    answerText.setEnabled(false);
+                    HideLoadingBar();
                 }
 
-                loadingBar.setVisibility(View.GONE);
-                break;
+                return;
             case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
-                loadingBar.setVisibility(View.VISIBLE);
+                new Thread(() -> {
+                    CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                    if (resultCode == RESULT_OK) {
+                        currentPhotoUri = result.getUri();
 
-                CropImage.ActivityResult result = CropImage.getActivityResult(data);
-                if (resultCode == RESULT_OK) {
-                    currentPhotoUri = result.getUri();
+                        QueryLatexAPI(this);
+                        QueryWolframAPI();
+                    } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                        DisplayError();
+                    }
 
-                    QueryLatexAPI();
-                    QueryWolframAPI();
-                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                    HandleErrors();
-                } else {
-                    answerText.setEnabled(false);
-                }
-
-                loadingBar.setVisibility(View.GONE);
+                    HideLoadingBar();
+                });
                 break;
             default:
                 break;
         }
+
+        HideLoadingBar();
     }
 
-    private void QueryLatexAPI() {
-        LaTeX_OCR_API laTeXApiInstance = new LaTeX_OCR_API(this, currentPhotoUri);
+    //  Calculation methods
+    private void QueryLatexAPI(Context context) {
+        LaTeX_OCR_API laTeXApiInstance = new LaTeX_OCR_API(context, currentPhotoUri);
 
         String response = laTeXApiInstance.GetResponseFromServer();
         if (response != null) {
-            equationText.setText(response);
+            SetEquation(response);
         } else {
-            HandleErrors();
+            DisplayError();
         }
     }
 
     private void QueryWolframAPI() {
         ArrayList<String> result = WolframAPI.SendQuery(equationText.getText().toString(), this);
 
-        String resultFormatted = "";
+        StringBuilder resultFormatted = new StringBuilder();
         if (result != null && result.size() != 0) {
             if (!result.get(0).equals("")) {
                 for (String line : result) {
-                    resultFormatted += line + "\n";
+                    resultFormatted.append(line).append("\n");
                 }
             } else {
-                HandleErrors();
+                DisplayError();
                 return;
             }
         } else {
-            HandleErrors();
+            DisplayError();
             return;
         }
 
-        if (!resultFormatted.equals("")) {
-            resultFormatted = resultFormatted.substring(0, resultFormatted.length() - 1);
-            answerText.setText(resultFormatted);
+        if (!resultFormatted.toString().equals("")) {
+            resultFormatted = new StringBuilder(resultFormatted.substring(0, resultFormatted.length() - 1));
+            SetAnswer(resultFormatted.toString());
         } else {
-            HandleErrors();
+            DisplayError();
         }
     }
 
-    private void HandleErrors() {
-        loadingBar.setVisibility(View.GONE);
-        answerText.setText(R.string.error_text, TextView.BufferType.EDITABLE);
-        answerText.setEnabled(false);
+    private void CalculateFromInput(Context context) {
+        if (equationText.getText() != null && !equationText.getText().toString().equals("")) {
+            if (NetworkAPI.GetNetworkStatus(context)) {
+                QueryWolframAPI();
+            } else {
+                List<String> expression = RPN_Parser.getParsedStr(equationText.getText().toString());
+
+                if (expression.size() != 0 && !expression.contains("Error")) {
+                    String answer = String.valueOf(RPN_Core.calc(expression));
+                    SetAnswer(answer);
+                }
+                else {
+                    DisplayError();
+                }
+            }
+        } else {
+            DisplayError();
+        }
+
+        HideLoadingBar();
+    }
+
+    //  UI methods
+    private void DisplayError() {
+        runOnUiThread(() -> {
+            loadingBar.setVisibility(View.GONE);
+            answerText.setText(R.string.error_text, TextView.BufferType.EDITABLE);
+            answerText.setEnabled(false);
+        });
+    }
+
+    private void SetEquation(String equation) {
+        runOnUiThread(() -> equationText.setText(equation));
+    }
+
+    private void SetAnswer(String answer) {
+        runOnUiThread(() -> {
+            answerText.setText(answer);
+            answerText.setEnabled(true);
+        });
+    }
+
+    private void HideLoadingBar() {
+        runOnUiThread(() -> loadingBar.setVisibility(View.GONE));
     }
 
     private void HideVirtualKeyboard() {
@@ -260,9 +269,22 @@ public class MainActivity extends AppCompatActivity {
         if (focusedView != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(focusedView.getWindowToken(), 0);
-        }
-        if (focusedView != null) {
             focusedView.clearFocus();
+        }
+    }
+
+    //  Broadcast receiver (un-)registering
+    public void dispatchBroadcastIntent() {
+        registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        try {
+            unregisterReceiver(broadcastReceiver);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
         }
     }
 }
