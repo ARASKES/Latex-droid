@@ -16,7 +16,7 @@
     <string name="camera_button_desc">Capture image.</string>
     <string name="answer_window_desc">The window for answer display.</string>
     <!-- Network -->
-    <string name="server_ip_address">34.118.83.161</string>
+    <string name="server_ip_address">34.116.187.123</string>
     <string name="wolfram_app_id">K6T6J7-EPP65Y7RHG</string>
     <string name="network_established_message">You are back online!</string>
     <string name="network_not_found_message">You are offline. The application functional will be restricted.</string>

@@ -143,11 +143,16 @@ public class MainActivity extends AppCompatActivity {
                         currentPhotoUri = data.getData();
 
                         QueryLatexAPI(this);
-                        QueryWolframAPI();
+                        try {
+                            Thread.sleep(10);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        QueryWolframAPI(this);
                     }
 
                     HideLoadingBar();
-                });
+                }).start();
                 break;
             case REQUEST_IMAGE_CAPTURE:
                 if (resultCode == RESULT_OK) {
@@ -165,19 +170,23 @@ public class MainActivity extends AppCompatActivity {
                         currentPhotoUri = result.getUri();
 
                         QueryLatexAPI(this);
-                        QueryWolframAPI();
+                        try {
+                            Thread.sleep(10);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        QueryWolframAPI(this);
                     } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                         DisplayError();
                     }
 
                     HideLoadingBar();
-                });
+                }).start();
                 break;
             default:
+                HideLoadingBar();
                 break;
         }
-
-        HideLoadingBar();
     }
 
     //  Calculation methods
@@ -192,8 +201,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void QueryWolframAPI() {
-        ArrayList<String> result = WolframAPI.SendQuery(equationText.getText().toString(), this);
+    private void QueryWolframAPI(Context context) {
+        ArrayList<String> result = WolframAPI.SendQuery(equationText.getText().toString(), context);
 
         StringBuilder resultFormatted = new StringBuilder();
         if (result != null && result.size() != 0) {
@@ -221,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
     private void CalculateFromInput(Context context) {
         if (equationText.getText() != null && !equationText.getText().toString().equals("")) {
             if (NetworkAPI.GetNetworkStatus(context)) {
-                QueryWolframAPI();
+                QueryWolframAPI(context);
             } else {
                 List<String> expression = RPN_Parser.getParsedStr(equationText.getText().toString());
 
