@@ -15,6 +15,7 @@
         <item name="android:fontFamily">@font/montserrat_light</item>
         <item name="android:windowAnimationStyle">@style/AppActivityAnimation</item>
         <item name="alertDialogTheme">@style/AlertDialogTheme</item>
+        <item name="colorAccent">@color/secondary_color</item>
     </style>
 
     <style name="AlertDialogTheme" parent="ThemeOverlay.AppCompat.Dialog.Alert">
@@ -23,6 +24,7 @@
         <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
         <item name="android:textColorPrimary">@color/primary_color</item>
         <item name="android:textStyle">bold</item>
+        <item name="colorAccent">@color/primary_color</item>
     </style>
 
     <style name="NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
