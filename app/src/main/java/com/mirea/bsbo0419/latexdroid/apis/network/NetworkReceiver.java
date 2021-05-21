@@ -34,6 +34,8 @@ public class NetworkReceiver extends BroadcastReceiver {
         if (!isReferredFirstTime) {
             Toast.makeText(context, status, Toast.LENGTH_SHORT).show();
         }
-        isReferredFirstTime = false;
+        else {
+            isReferredFirstTime = false;
+        }
     }
 }

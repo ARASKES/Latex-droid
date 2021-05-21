@@ -46,8 +46,9 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar loadingBar;
 
     // Data
-    Uri currentPhotoUri;
-    BroadcastReceiver broadcastReceiver = null;
+    private Uri currentPhotoUri;
+    private BroadcastReceiver broadcastReceiver = null;
+    private boolean isReceiverRegistered = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
     //  onClick methods
     public void onCalculateClick(View view) {
         answerText.setText("");
+        answerText.setEnabled(false);
         HideVirtualKeyboard();
         loadingBar.setVisibility(View.VISIBLE);
 
@@ -136,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         loadingBar.setVisibility(View.VISIBLE);
+        answerText.setEnabled(false);
 
         switch (requestCode) {
             case REQUEST_SELECT_IMAGE:
@@ -287,17 +290,32 @@ public class MainActivity extends AppCompatActivity {
 
     //  Broadcast receiver (un-)registering
     public void dispatchBroadcastIntent() {
-        registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        if (!isReceiverRegistered) {
+            registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+            isReceiverRegistered = true;
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+
         try {
-            unregisterReceiver(broadcastReceiver);
+            if (isReceiverRegistered) {
+                unregisterReceiver(broadcastReceiver);
+                isReceiverRegistered = false;
+            }
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
+
         NetworkReceiver.isReferredFirstTime = true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        dispatchBroadcastIntent();
     }
 }
