@@ -7,31 +7,33 @@ import com.wolfram.alpha.*;
 import java.util.ArrayList;
 
 public class WolframAPI {
+    private static String appId = null;
+
     public static String input;
     public static boolean typeOfTask;
     public static WAQueryResult queryResult;
 
-    public static ArrayList<String> SendQuery(String equationText, Context context){
+    public static ArrayList<String> SendQuery(String equationText, Context context) {
 
         input = equationText;
 
         ArrayList<String> res = new ArrayList<String>();
         typeOfTask = input.contains("=");
 
+        if (appId == null) {
+            appId = context.getString(R.string.wolfram_app_id);
+        }
         WAEngine engine = new WAEngine();
-        engine.setAppID(context.getString(R.string.wolfram_app_id));
+        engine.setAppID(appId);
 
         WAQuery query = engine.createQuery();
         query.setInput(input);
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try  {
-                    queryResult = engine.performQuery(query);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        Thread thread = new Thread(() -> {
+            try  {
+                queryResult = engine.performQuery(query);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
 
@@ -74,12 +76,12 @@ public class WolframAPI {
         return res;
     }
 
-    public static ArrayList<String> FindResult(){
+    private static ArrayList<String> FindResult() {
         ArrayList<String> res = new ArrayList<String>();
 
         for (WAPod pod : queryResult.getPods()) {
             if (!pod.isError()) {
-                if(pod.getTitle().toLowerCase().contains("approximation")){
+                if(pod.getTitle().toLowerCase().contains("approximation")) {
                     for (WASubpod subPod : pod.getSubpods()) {
                         for (Object element : subPod.getContents()) {
                             if (element instanceof WAPlainText) {
@@ -108,5 +110,13 @@ public class WolframAPI {
         }
 
         return res;
+    }
+
+    public static String GetAppID() {
+        return appId;
+    }
+
+    public static void SetAppID(String appId) {
+        WolframAPI.appId = appId;
     }
 }

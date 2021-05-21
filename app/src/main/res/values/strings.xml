@@ -4,6 +4,15 @@
     <string name="welcome_title_text">Welcome to LatexDroid!</string>
     <string name="welcome_subtitle_text">Nice to see you!</string>
     <string name="start_button_text">Start work</string>
+        <!-- Content descriptions -->
+    <string name="config_button_desc">Open the configs.</string>
+    <!-- Configuration dialog -->
+    <string name="config_dialog_title">Configuration</string>
+    <string name="dialog_positive_button">Set</string>
+    <string name="ip_label">IP</string>
+    <string name="ip_hint">Latex server IP address</string>
+    <string name="app_id_label">App ID</string>
+    <string name="app_id_hint">Wolfram App ID</string>
     <!-- Main activity -->
     <string name="main_title">Input your equation or upload an image</string>
     <string name="input_field_hint">Your equation</string>
@@ -19,5 +28,5 @@
     <string name="server_ip_address">34.116.187.123</string>
     <string name="wolfram_app_id">K6T6J7-EPP65Y7RHG</string>
     <string name="network_established_message">You are back online!</string>
-    <string name="network_not_found_message">You are offline. The application functional will be restricted.</string>
+    <string name="network_not_found_message">You are offline. The application functional will be limited.</string>
 </resources>

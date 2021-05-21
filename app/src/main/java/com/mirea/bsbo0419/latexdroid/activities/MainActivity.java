@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
     //  onClick methods
     public void onCalculateClick(View view) {
+        answerText.setText("");
         HideVirtualKeyboard();
         loadingBar.setVisibility(View.VISIBLE);
 
@@ -140,6 +141,8 @@ public class MainActivity extends AppCompatActivity {
             case REQUEST_SELECT_IMAGE:
                 new Thread(() -> {
                     if (resultCode == RESULT_OK && data != null && data.getData() != null) {
+                        runOnUiThread(() -> answerText.setText(""));
+
                         currentPhotoUri = data.getData();
 
                         QueryLatexAPI(this);
@@ -167,6 +170,8 @@ public class MainActivity extends AppCompatActivity {
                 new Thread(() -> {
                     CropImage.ActivityResult result = CropImage.getActivityResult(data);
                     if (resultCode == RESULT_OK) {
+                        runOnUiThread(() -> answerText.setText(""));
+
                         currentPhotoUri = result.getUri();
 
                         QueryLatexAPI(this);
@@ -191,9 +196,7 @@ public class MainActivity extends AppCompatActivity {
 
     //  Calculation methods
     private void QueryLatexAPI(Context context) {
-        LaTeX_OCR_API laTeXApiInstance = new LaTeX_OCR_API(context, currentPhotoUri);
-
-        String response = laTeXApiInstance.GetResponseFromServer();
+        String response = LaTeX_OCR_API.GetResponseFromServer(context, currentPhotoUri);
         if (response != null) {
             SetEquation(response);
         } else {
@@ -295,5 +298,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
+        NetworkReceiver.isReferredFirstTime = true;
     }
 }

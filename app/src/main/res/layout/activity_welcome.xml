@@ -44,7 +44,7 @@
         android:layout_marginTop="100dp"
         android:layout_marginBottom="300dp"
         android:backgroundTint="@color/secondary_color"
-        android:onClick="ProceedToMain"
+        android:onClick="onStartClick"
         android:text="@string/start_button_text"
         android:textAllCaps="false"
         android:textStyle="bold"
@@ -55,4 +55,17 @@
         app:layout_constraintTop_toBottomOf="@+id/welcome_subtitle"
         app:layout_constraintVertical_bias="0.0"
         tools:targetApi="lollipop" />
+
+    <ImageButton
+        android:id="@+id/configButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@null"
+        android:contentDescription="@string/config_button_desc"
+        android:onClick="onConfigClick"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_config_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>

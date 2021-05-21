@@ -16,8 +16,13 @@ public class WelcomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
     }
 
-    public void ProceedToMain(View view) {
+    public void onStartClick(View view) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    public void onConfigClick(View view) {
+        ConfigDialog configDialog = new ConfigDialog();
+        configDialog.show(getSupportFragmentManager(), "config dialog");
     }
 }

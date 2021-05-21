@@ -14,6 +14,25 @@
         <!-- Customize your theme here. -->
         <item name="android:fontFamily">@font/montserrat_light</item>
         <item name="android:windowAnimationStyle">@style/AppActivityAnimation</item>
+        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
+    </style>
+
+    <style name="AlertDialogTheme" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="android:windowBackground">@color/white</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="android:textColorPrimary">@color/primary_color</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/primary_color</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/primary_color</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="AppActivityAnimation" parent="@android:style/Animation.Activity">

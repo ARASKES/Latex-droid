@@ -1,0 +1,88 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ip_label"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="4dp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <EditText
+            android:id="@+id/ip_address_edittext"
+            android:inputType="text"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="4dp"
+            android:hint="@string/ip_hint"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/primary_color"
+            android:autofillHints=""
+            tools:targetApi="lollipop" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/app_id_label"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="4dp"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <EditText
+            android:id="@+id/app_id_edittext"
+            android:inputType="text"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="4dp"
+            android:hint="@string/app_id_hint"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/primary_color"
+            android:autofillHints=""
+            tools:targetApi="lollipop" />
+
+    </LinearLayout>
+
+</LinearLayout>

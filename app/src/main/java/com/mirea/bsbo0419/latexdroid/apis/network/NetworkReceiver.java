@@ -10,6 +10,8 @@ import android.widget.Toast;
 import com.mirea.bsbo0419.latexdroid.R;
 
 public class NetworkReceiver extends BroadcastReceiver {
+    public static boolean isReferredFirstTime = true;
+
     @Override
     public void onReceive(Context context, Intent intent) {
         String status;
@@ -29,6 +31,9 @@ public class NetworkReceiver extends BroadcastReceiver {
             cameraButton.setEnabled(false);
         }
 
-        Toast.makeText(context, status, Toast.LENGTH_SHORT).show();
+        if (!isReferredFirstTime) {
+            Toast.makeText(context, status, Toast.LENGTH_SHORT).show();
+        }
+        isReferredFirstTime = false;
     }
 }
