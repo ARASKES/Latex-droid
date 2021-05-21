@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="config_button_desc">Открыт настройки.</string>
+    <string name="start_button_text">Начать работу</string>
+    <string name="welcome_title_text">Добро пожаловать в LatexDroid!</string>
+    <string name="config_dialog_title">Настройки</string>
+    <string name="dialog_positive_button">Применить</string>
+    <string name="ip_hint">IP адрес сервера Latex</string>
+    <string name="main_title">Введите уравнение или загрузите изображение</string>
+    <string name="input_field_hint">Ваше уравнение</string>
+    <string name="calculate_button_text">Вычислить</string>
+    <string name="answer_hint_text">Здесь будет ответ</string>
+    <string name="error_text">Произошла ошибка</string>
+    <string name="clear_button_desc">Очистить поле ввода.</string>
+    <string name="gallery_button_desc">Загрузить изображение с устройства.</string>
+    <string name="camera_button_desc">Сделать снимок.</string>
+    <string name="answer_window_desc">Окно для отображения ответа.</string>
+    <string name="network_established_message">Вы снова онлайн!</string>
+    <string name="network_not_found_message">Соединение потеряно. Функционал приложения ограничен.</string>
+    <string name="welcome_subtitle_text">Приложение готово к работе!</string>
+    <string name="dialog_negative_button">Отмена</string>
+</resources>

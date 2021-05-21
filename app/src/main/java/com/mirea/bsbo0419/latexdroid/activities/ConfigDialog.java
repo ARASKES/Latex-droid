@@ -31,7 +31,7 @@ public class ConfigDialog extends AppCompatDialogFragment {
                     LaTeX_OCR_API.SetIP(editTextIp.getText().toString());
                     WolframAPI.SetAppID(editTextAppId.getText().toString());
                 })
-                .setNegativeButton(android.R.string.no, null);
+                .setNegativeButton(R.string.dialog_negative_button, null);
 
         editTextIp = view.findViewById(R.id.ip_address_edittext);
         if (LaTeX_OCR_API.GetIP() == null) {
